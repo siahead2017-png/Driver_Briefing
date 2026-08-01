@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Инструктаж">
+  <circle cx="96" cy="96" r="94" fill="#d4571f"/>
+  <rect x="36" y="28" width="120" height="144" rx="14" fill="#fff" stroke="#1f4e8c" stroke-width="3.5"/>
+  <rect x="71" y="19" width="50" height="19" rx="6.5" fill="#1f4e8c"/>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <rect x="54" y="71" width="15" height="15" rx="4" fill="#17a34a"/>
+    <path d="M57.7 78.9 60.6 81.9 65.9 75.2" stroke="#fff" stroke-width="2.5" fill="none"/>
+    <path d="M77.5 78.6 H138" stroke="#1f6feb" stroke-width="2.5"/>
+
+    <rect x="54" y="95" width="15" height="15" rx="4" fill="#17a34a"/>
+    <path d="M57.7 103.3 60.6 106.3 65.9 99.6" stroke="#fff" stroke-width="2.5" fill="none"/>
+    <path d="M77.5 103 H138" stroke="#1f6feb" stroke-width="2.5"/>
+
+    <rect x="54" y="120" width="15" height="15" rx="4" fill="none" stroke="#c8d1db" stroke-width="2.5"/>
+    <path d="M77.5 127.4 H138" stroke="#c8d1db" stroke-width="2.5"/>
+  </g>
+</svg>

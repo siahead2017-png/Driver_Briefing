@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Инструктаж водителя — HEAD, HDLG</title>
+<meta name="description" content="Сценарий инструктажа водителя: шесть блоков, тайминг, отметки о пройденном.">
+<meta name="theme-color" content="#f4f6f9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr__top">
+    <h1 class="hdr__title">Инструктаж водителя</h1>
+    <button class="hdr__timer" id="timer" type="button" title="Пуск / пауза. Долгое нажатие — сброс">00:00</button>
+  </div>
+  <p class="hdr__sub" id="sub">Отдел учёта · HEAD, HD Logistics Group</p>
+  <div class="bar"><div class="bar__fill" id="barFill"></div></div>
+  <div class="hdr__stat">
+    <span id="stat">—</span>
+    <button class="hdr__reset" id="reset" type="button">Сбросить для нового водителя</button>
+  </div>
+</header>
+
+<div class="legend" id="legend"></div>
+
+<main id="app">
+  <p class="note" style="padding:20px 0">Загружаю…</p>
+</main>
+
+<p class="foot">
+  <a href="print.html">Версия для печати</a> ·
+  <a href="https://siahead2017-png.github.io/Driver_Instructions/" target="_blank" rel="noopener">База знаний</a> ·
+  <a href="https://siahead2017-png.github.io/FuelInstruction/" target="_blank" rel="noopener">Заправки</a>
+</p>
+
+<script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

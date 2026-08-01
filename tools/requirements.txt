@@ -1,0 +1,11 @@
+# Инструменты разработки. Для работы самого сайта не нужны —
+# готовые PDF, QR и иконки лежат в репозитории.
+#
+#   py -m pip install -r tools/requirements.txt
+#   py -m playwright install chromium
+#
+# Вторая команда обязательна: браузер весит ~150 МБ и в репозиторий не входит.
+
+playwright>=1.40    # build_pdf.py — рендер print.html в PDF
+segno>=1.6          # make_qr.py — QR-коды для памятки
+pillow>=10          # make_icons.py — иконки приложения
