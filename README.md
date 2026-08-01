@@ -33,7 +33,7 @@
 | `data/briefing.json` | **Весь текст.** Единственный файл для правок |
 | `index.html` | Экран инструктажа |
 | `print.html` | Печатная версия, оба документа |
-| `dist/*.pdf` | Готовые PDF, пересобираются скриптом |
+| `dist/*.pdf` | Готовые PDF (сценарий, памятка, контакты офиса), пересобираются скриптом |
 | `assets/js/app.js` | Рендер, чекбоксы, таймер |
 | `assets/js/store.js` | Прогресс в localStorage |
 | `assets/js/print.js` | Рендер печатных версий |
@@ -98,7 +98,7 @@ GitHub, не открывая терминал: изменения появят�
 
 ```powershell
 py tools/validate.py     # проверить briefing.json перед публикацией
-py tools/build_pdf.py    # пересобрать оба PDF в dist/
+py tools/build_pdf.py    # пересобрать все PDF в dist/
 py tools/make_qr.py      # перегенерировать QR (нужно только при смене адресов)
 py tools/make_icons.py   # перегенерировать иконки приложения
 ```

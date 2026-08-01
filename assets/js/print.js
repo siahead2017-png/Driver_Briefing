@@ -1,5 +1,6 @@
-/* Печатная версия. Один JSON — две разные бумаги:
-   ?doc=script — сценарий ведущего, ?doc=cheat — памятка водителю. */
+/* Печатная версия. Один JSON — три разные бумаги:
+   ?doc=script — сценарий ведущего, ?doc=cheat — памятка водителю,
+   ?doc=contacts — контакты офиса. */
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
@@ -13,7 +14,9 @@ function plural(n, one, few, many) {
   return many;
 }
 
-const doc = new URLSearchParams(location.search).get('doc') === 'cheat' ? 'cheat' : 'script';
+const DOCS = ['script', 'cheat', 'contacts'];
+const rawDoc = new URLSearchParams(location.search).get('doc');
+const doc = DOCS.includes(rawDoc) ? rawDoc : 'script';
 
 function headTag(data, title) {
   return `<div class="head">
@@ -110,21 +113,46 @@ function renderCheat(data) {
     <p class="lead">${esc(cs.lead)}</p>
     ${groups}
     <div class="qr-wrap">${qr}</div>
-    <p class="foot">Наведи камеру телефона на QR — откроется сайт. Добавь его на рабочий экран.</p>
+    <p class="foot">Наведите камеру телефона на QR — откроется сайт. Добавьте его на рабочий экран.</p>
+  </div>`;
+}
+
+/* ---------- Контакты офиса ---------- */
+
+function renderContacts(data) {
+  const c = data.contacts;
+
+  const groups = c.groups.map(g => `
+    <div class="grp">
+      <div class="grp__t">${esc(g.title)}</div>
+      ${g.rows.map(r => `
+        <div class="ct">
+          <span class="ct__phone">${esc(r.phone)}</span>
+          <span class="ct__b"><b>${esc(r.name)}</b>${r.note ? `<span class="ct__n">${esc(r.note)}</span>` : ''}</span>
+        </div>`).join('')}
+    </div>`).join('');
+
+  return `<div class="sheet">
+    ${headTag(data, c.title)}
+    <p class="lead">${esc(c.lead)}</p>
+    ${groups}
+    ${c.note ? `<p class="foot">${esc(c.note)}</p>` : ''}
   </div>`;
 }
 
 /* ---------- Старт ---------- */
 
+const RENDERERS = { script: renderScript, cheat: renderCheat, contacts: renderContacts };
+const TITLE_OF = { script: d => d.title, cheat: d => d.cheatsheet.title, contacts: d => d.contacts.title };
+const TAB_ID = { script: 'tabScript', cheat: 'tabCheat', contacts: 'tabContacts' };
+
 (async function init() {
   const res = await fetch(`data/briefing.json?v=${Date.now()}`);
   const data = await res.json();
 
-  document.getElementById('doc').innerHTML =
-    doc === 'cheat' ? renderCheat(data) : renderScript(data);
-
-  document.title = (doc === 'cheat' ? data.cheatsheet.title : data.title) + ' — печать';
-  document.getElementById(doc === 'cheat' ? 'tabCheat' : 'tabScript').classList.add('is-active');
+  document.getElementById('doc').innerHTML = RENDERERS[doc](data);
+  document.title = TITLE_OF[doc](data) + ' — печать';
+  document.getElementById(TAB_ID[doc])?.classList.add('is-active');
 
   // Сигнал для build_pdf.py: вёрстка готова, можно печатать.
   document.body.dataset.ready = '1';

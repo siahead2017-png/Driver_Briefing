@@ -17,7 +17,7 @@ OUT = os.path.join(HERE, '..', 'assets', 'qr')
 DATA = os.path.join(HERE, '..', 'data', 'briefing.json')
 
 # Коррекция 'm': запас на случай, если лист помнётся или засветится.
-CODES = {'fuel': 'fuel', 'kb': 'kb'}
+CODES = {'fuel': 'fuel', 'kb': 'kb', 'contacts': 'contacts'}
 
 
 def main():
