@@ -126,7 +126,7 @@ body {
    Блоки намеренно НЕ запрещено разрывать: с break-inside:avoid каждый
    блок уезжал на новую страницу и сценарий раздувался вдвое. Разрыв
    держим на уровне пункта — вот его рвать нельзя. */
-.blk { margin-bottom: 6px; }
+.blk { margin-bottom: 5px; }
 
 .blk__h {
   display: flex;
@@ -134,8 +134,8 @@ body {
   gap: 7px;
   background: var(--tint);
   border-left: 3px solid var(--accent);
-  padding: 2.5px 8px;
-  margin-bottom: 3px;
+  padding: 2px 8px;
+  margin-bottom: 2px;
   break-after: avoid;  /* заголовок не остаётся один внизу листа */
 }
 
@@ -155,7 +155,7 @@ body {
 .row {
   display: flex;
   gap: 6px;
-  padding: 1.2px 0 1.2px 11px;
+  padding: 0.8px 0 0.8px 11px;
   break-inside: avoid;
 }
 
@@ -173,7 +173,9 @@ body {
 .row--say .row__t { font-weight: 600; }
 .row--say .box { border-color: var(--say); border-width: 1.4px; }
 .row--show .box { border-color: var(--show); }
-.row--skip { color: var(--dim); font-size: 9pt; }
+/* skip = «только назвать раздел базы», самые неважные пункты. 9pt совпадало
+   с базовым кеглем, то есть правило ничего не меняло — на экране они мельче. */
+.row--skip { color: var(--dim); font-size: 8.5pt; }
 .row--skip .box { border-color: var(--line); }
 
 .row--critical .row__t {
@@ -225,25 +227,27 @@ th, td { border: .6px solid var(--line); padding: 2px 5px; text-align: left; ver
 th { background: var(--tint); font-weight: 600; }
 td:last-child { color: var(--danger); font-weight: 600; white-space: nowrap; }
 
-/* ---------- Памятка водителя ---------- */
-.grp { margin-bottom: 4px; break-inside: avoid; }
+/* ---------- Памятка водителя ----------
+   Кегль 9.5pt не трогать: это документ, который водитель читает с рук.
+   Место экономим интервалами — они дешевле читаемости. */
+.grp { margin-bottom: 3px; break-inside: avoid; }
 
 .grp__t {
   font-size: 10pt;
   font-weight: 700;
   background: var(--ink);
   color: #fff;
-  padding: 2.5px 8px;
-  margin-bottom: 3px;
+  padding: 2px 8px;
+  margin-bottom: 2px;
 }
 
 .cs {
   display: flex;
   gap: 6px;
-  padding: 1.6px 4px;
+  padding: 1.1px 4px;
   border-bottom: .6px solid var(--line);
   font-size: 9.5pt;
-  line-height: 1.25;
+  line-height: 1.2;
   break-inside: avoid;
 }
 
@@ -286,8 +290,8 @@ td:last-child { color: var(--danger); font-weight: 600; white-space: nowrap; }
 .qr-wrap {
   display: flex;
   gap: 12px;
-  margin-top: 9px;
-  padding-top: 8px;
+  margin-top: 6px;
+  padding-top: 6px;
   border-top: 2px solid var(--ink);
   break-inside: avoid;
 }
