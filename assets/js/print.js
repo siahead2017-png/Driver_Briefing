@@ -1,20 +1,12 @@
-/* Печатная версия. Один JSON — три разные бумаги:
+/* Печатная версия. Один JSON — четыре разные бумаги:
+   ?doc=guide — как вести инструктаж (ведущему),
    ?doc=script — сценарий ведущего, ?doc=cheat — памятка водителю,
    ?doc=contacts — контакты офиса. */
 
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => (
-  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-));
+// Версию из ?v= передаём дальше, иначе util.js приедет из кэша — см. app.js.
+const { esc, plural, slots } = await import('./util.js' + new URL(import.meta.url).search);
 
-// «1 минуту», «32 минуты», «35 минут»
-function plural(n, one, few, many) {
-  const m10 = n % 10, m100 = n % 100;
-  if (m10 === 1 && m100 !== 11) return one;
-  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
-  return many;
-}
-
-const DOCS = ['script', 'cheat', 'contacts'];
+const DOCS = ['guide', 'script', 'cheat', 'contacts'];
 const rawDoc = new URLSearchParams(location.search).get('doc');
 const doc = DOCS.includes(rawDoc) ? rawDoc : 'script';
 
@@ -38,19 +30,21 @@ function renderRow(item) {
     ? `<table><thead><tr>${item.table.head.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
        <tbody>${item.table.rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>` : '';
 
-  const quote = item.quote ? `<p class="q">${esc(item.quote)}</p>` : '';
+  const quote = item.quote ? `<p class="q">${slots(item.quote)}</p>` : '';
   const note = item.note ? `<p class="nt">${esc(item.note)}</p>` : '';
 
   // На бумаге URL бесполезен — печатаем название карточки, искать её водитель
-  // будет поиском в базе.
+  // будет поиском в базе. Фолбэк на сам id как на экране: без него пункт
+  // с link, но без linkTitle молча исчезал бы с бумаги.
   const refs = [];
-  if (item.linkTitle) refs.push(item.linkTitle);
-  for (const l of item.links || []) refs.push(l.title);
+  if (item.link) refs.push(item.linkTitle || item.link);
+  if (item.href) refs.push(item.linkTitle || item.href);
+  for (const l of item.links || []) refs.push(l.title || l.id);
   const ref = refs.length ? `<p class="ref">${esc(refs.join(' · '))}</p>` : '';
 
   return `<div class="${cls}">
     <span class="box"></span>
-    <div class="row__b"><span class="row__t">${esc(item.text)}${tag}</span>${list}${table}${quote}${note}${ref}</div>
+    <div class="row__b"><span class="row__t">${slots(item.text)}${tag}</span>${list}${table}${quote}${note}${ref}</div>
   </div>`;
 }
 
@@ -72,6 +66,7 @@ function renderScript(data) {
         <span class="blk__m">${b.minutes} мин</span>
       </div>
       ${b.goal ? `<p class="blk__goal">${esc(b.goal)}</p>` : ''}
+      ${b.note ? `<p class="blk__goal">${esc(b.note)}</p>` : ''}
       ${b.items.map(renderRow).join('')}
     </div>`).join('');
 
@@ -117,6 +112,28 @@ function renderCheat(data) {
   </div>`;
 }
 
+/* ---------- Как вести инструктаж ---------- */
+
+function renderGuide(data) {
+  const g = data.guide;
+
+  const sections = (g.sections || []).map(s => `
+    <div class="grp">
+      ${s.title ? `<div class="grp__t">${esc(s.title)}</div>` : ''}
+      ${s.text ? `<p class="gd">${slots(s.text)}</p>` : ''}
+      ${(s.items || []).length
+        ? `<ul class="sub">${s.items.map(i => `<li>${slots(i)}</li>`).join('')}</ul>`
+        : ''}
+    </div>`).join('');
+
+  return `<div class="sheet">
+    ${headTag(data, g.title)}
+    ${g.lead ? `<p class="lead">${esc(g.lead)}</p>` : ''}
+    ${sections}
+    <p class="foot">Сам сценарий — отдельный документ «Сценарий ведущего».</p>
+  </div>`;
+}
+
 /* ---------- Контакты офиса ---------- */
 
 function renderContacts(data) {
@@ -142,18 +159,33 @@ function renderContacts(data) {
 
 /* ---------- Старт ---------- */
 
-const RENDERERS = { script: renderScript, cheat: renderCheat, contacts: renderContacts };
-const TITLE_OF = { script: d => d.title, cheat: d => d.cheatsheet.title, contacts: d => d.contacts.title };
-const TAB_ID = { script: 'tabScript', cheat: 'tabCheat', contacts: 'tabContacts' };
+const RENDERERS = { guide: renderGuide, script: renderScript, cheat: renderCheat, contacts: renderContacts };
+const TITLE_OF = {
+  guide: d => d.guide.title,
+  script: d => d.title,
+  cheat: d => d.cheatsheet.title,
+  contacts: d => d.contacts.title
+};
+const TAB_ID = { guide: 'tabGuide', script: 'tabScript', cheat: 'tabCheat', contacts: 'tabContacts' };
 
 (async function init() {
-  const res = await fetch(`data/briefing.json?v=${Date.now()}`);
-  const data = await res.json();
+  try {
+    const res = await fetch(`data/briefing.json?v=${Date.now()}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
 
-  document.getElementById('doc').innerHTML = RENDERERS[doc](data);
-  document.title = TITLE_OF[doc](data) + ' — печать';
-  document.getElementById(TAB_ID[doc])?.classList.add('is-active');
+    document.getElementById('doc').innerHTML = RENDERERS[doc](data);
+    document.title = TITLE_OF[doc](data) + ' — печать';
+    document.getElementById(TAB_ID[doc])?.classList.add('is-active');
 
-  // Сигнал для build_pdf.py: вёрстка готова, можно печатать.
-  document.body.dataset.ready = '1';
+    // Сигнал для build_pdf.py: вёрстка готова, можно печатать.
+    document.body.dataset.ready = '1';
+  } catch (err) {
+    document.getElementById('doc').innerHTML =
+      `<div class="sheet"><p class="lead">Не удалось собрать документ: ${esc(err.message)}.<br>
+       Проверьте data/briefing.json командой <code>py -X utf8 tools/validate.py</code>.</p></div>`;
+    // Не '1': иначе build_pdf.py напечатает PDF с текстом ошибки вместо содержимого,
+    // а это худший исход — он тихий.
+    document.body.dataset.ready = 'error';
+  }
 })();

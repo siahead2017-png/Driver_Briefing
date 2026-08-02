@@ -26,14 +26,21 @@
     <button class="hdr__timer" id="timer" type="button" title="Пуск / пауза. Долгое нажатие — сброс">00:00</button>
   </div>
   <p class="hdr__sub" id="sub">Отдел учёта · HEAD, HD Logistics Group</p>
-  <div class="bar"><div class="bar__fill" id="barFill"></div></div>
+  <div class="bar" id="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+       aria-valuenow="0" aria-label="Пройдено пунктов">
+    <div class="bar__fill" id="barFill"></div>
+  </div>
   <div class="hdr__stat">
     <span id="stat">—</span>
-    <button class="hdr__reset" id="reset" type="button">Сбросить для нового водителя</button>
+    <button class="hdr__reset" id="reset" type="button" disabled
+            title="Сбросить все отметки и таймер для нового водителя"
+            aria-label="Сбросить все отметки и таймер для нового водителя">Сбросить</button>
   </div>
 </header>
 
 <div class="legend" id="legend"></div>
+
+<section class="guide-wrap" id="guide" hidden></section>
 
 <main id="app">
   <p class="note" style="padding:20px 0">Загружаю…</p>

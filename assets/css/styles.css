@@ -147,6 +147,19 @@ body {
 
 .hdr__reset:hover { color: var(--danger); border-color: var(--danger); }
 
+/* Данные не загрузились — сбрасывать нечего. Видимо неактивна, иначе нажатие
+   даёт confirm и молчание, что читается как «сброс не сработал». */
+.hdr__reset:disabled { opacity: .45; cursor: default; }
+.hdr__reset:disabled:hover { color: var(--text-dim); border-color: var(--border); }
+
+/* Кастомные кнопки везде: без этого клавиатурная навигация вслепую.
+   :focus-visible, а не :focus — рамка при клавиатуре, но не при тапе. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
 /* ---------- Легенда ---------- */
 .legend {
   display: flex;
@@ -169,6 +182,64 @@ body {
 .dot--say { background: var(--say); }
 .dot--show { background: var(--show); }
 .dot--skip { background: var(--skip); }
+
+/* ---------- Гайд «Как вести инструктаж» ----------
+   Для коллеги, который проводит впервые. Свёрнут по умолчанию: во время
+   инструктажа занимает одну строку и не мешает. Нативный <details> —
+   работает с клавиатуры и не требует состояния в store.js. */
+.guide-wrap { padding: 12px var(--pad) 0; }
+
+.guide {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.guide summary {
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 14.5px;
+  color: var(--text-dim);
+  list-style: none;
+}
+
+.guide summary::-webkit-details-marker { display: none; }
+
+.guide summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--accent);
+  transition: transform .2s ease;
+}
+
+.guide[open] summary::before { transform: rotate(90deg); }
+.guide summary b { color: var(--text); font-weight: 650; }
+
+.guide__body { padding: 0 14px 14px; }
+
+.guide__lead {
+  font-size: 13.5px;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 9px 11px;
+  margin: 0 0 12px;
+}
+
+.guide__sec { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px; }
+.guide__sec:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+
+.guide__sec h3 {
+  margin: 0 0 5px;
+  font-size: 14.5px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+}
+
+.guide__sec p { margin: 0 0 6px; font-size: 14px; line-height: 1.45; }
+.guide__sec .check { font-size: 14px; }
 
 /* ---------- Список блоков ---------- */
 main { padding: 12px var(--pad) 60px; }
@@ -364,6 +435,16 @@ main { padding: 12px var(--pad) 60px; }
   white-space: pre-line; /* \n\n в data/briefing.json — разрыв абзаца в длинных цитатах */
 }
 
+/* Место, которое ведущий подставляет голосом ({имя} в JSON). Прямой шрифт
+   внутри курсивной цитаты + цвет + пунктир — три сигнала «это поле, а не
+   часть фразы», чтобы никто не прочитал его вслух как есть. */
+.slot {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent);
+  border-bottom: 2px dashed currentColor;
+}
+
 .check {
   margin: 7px 0 0;
   padding: 0;
@@ -436,5 +517,7 @@ td:last-child { white-space: nowrap; color: var(--danger); font-weight: 600; }
 
 .foot a { color: var(--text-dim); }
 
-/* ---------- Экран печати не нужен: печать живёт в print.html ---------- */
-@media print { .hdr, .legend, .foot { display: none; } }
+/* Печатных правил здесь намеренно нет: печать живёт в print.html.
+   Прежний @media print скрывал шапку и подвал, но тела свёрнутых блоков
+   остаются display:none — на бумагу уходили одни заголовки. Это создавало
+   иллюзию, что Ctrl+P на главной даёт годный документ. */

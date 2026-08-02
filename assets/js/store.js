@@ -68,6 +68,14 @@ export function toggleTimer() {
   return isRunning();
 }
 
+/* Только время. Отдельно от resetAll: таймер часто запускают заранее,
+   пока водитель идёт, и сбрасывать вместе с ним все отметки не нужно. */
+export function resetTimer() {
+  state.elapsed = 0;
+  state.startedAt = null;
+  save();
+}
+
 export function resetAll() {
   state = empty();
   save();

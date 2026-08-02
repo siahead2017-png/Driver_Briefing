@@ -310,10 +310,22 @@ td:last-child { color: var(--danger); font-weight: 600; white-space: nowrap; }
   text-align: center;
 }
 
+/* ---------- Как вести инструктаж ---------- */
+.gd { margin: 1px 0 3px; font-size: 8.5pt; line-height: 1.3; }
+
+/* Место, которое ведущий подставляет голосом. На бумаге пунктир под словом
+   читается как бланк — туда рука сама тянется вписать. */
+.slot { font-style: normal; font-weight: 700; border-bottom: 1px dashed var(--ink); }
+
+/* Панель вкладок — только на экране, но с клавиатуры по ней ходят. */
+.toolbar a:focus-visible, .toolbar button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* ---------- Печать ---------- */
 @media print {
   body { background: #fff; }
   .toolbar { display: none; }
   .sheet { width: auto; margin: 0; padding: 0; box-shadow: none; }
-  .page-break { break-before: page; }
 }

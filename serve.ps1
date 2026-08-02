@@ -1,5 +1,5 @@
 # Local preview server:  .\serve.ps1  ->  http://localhost:8000
-# Needed because the page loads data/instructions.json via fetch(),
+# Needed because the page loads data/briefing.json via fetch(),
 # which browsers block on file:// URLs.
 #
 # NOTE: kept ASCII-only on purpose. Windows PowerShell 5.1 reads .ps1 files
