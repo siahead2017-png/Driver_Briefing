@@ -5,6 +5,15 @@ const app = $('#app');
 
 let data = null;
 
+/* Высота шапки сайта плавает (заголовок переносится на узких экранах,
+   subtitle разной длины) — прилипающая шапка раскрытой карточки должна
+   останавливаться точно под ней, а не под фиксированным числом. */
+function syncHeaderHeight() {
+  document.documentElement.style.setProperty('--hdr-h', `${$('.hdr').offsetHeight}px`);
+}
+new ResizeObserver(syncHeaderHeight).observe($('.hdr'));
+syncHeaderHeight();
+
 /* ---------- Утилиты ---------- */
 
 // Весь текст приходит из JSON и вставляется через innerHTML — экранируем.

@@ -12,12 +12,14 @@
   --accent-soft: #e7f0fe;
   --shadow: 0 1px 2px rgba(16, 21, 28, .06), 0 4px 14px rgba(16, 21, 28, .06);
 
-  /* Уровни пунктов */
-  --say: #e5484d;
-  --say-soft: #fdecec;
-  --show: #d97706;
-  --show-soft: #fdf3e6;
-  --skip: #64748b;
+  /* Уровни пунктов. Опасность (деньги/критично/сброс) — отдельный
+     токен --danger, не завязан на цвет уровня «Говорить». */
+  --danger: #e5484d;
+  --danger-soft: #fdecec;
+  --say: #4ade80;
+  --show: #eab308;
+  --show-soft: #fdf6d8;
+  --skip: var(--danger);
 
   --ok: #17a34a;
 
@@ -38,11 +40,12 @@
     --accent-soft: #16283f;
     --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 14px rgba(0, 0, 0, .3);
 
-    --say: #ff6369;
-    --say-soft: #2a1517;
-    --show: #f0a13a;
-    --show-soft: #2a1f10;
-    --skip: #8b97a6;
+    --danger: #ff6369;
+    --danger-soft: #2a1517;
+    --say: #6ee7b7;
+    --show: #facc15;
+    --show-soft: #2e2810;
+    --skip: var(--danger);
     --ok: #3fb950;
   }
 }
@@ -142,7 +145,7 @@ body {
   cursor: pointer;
 }
 
-.hdr__reset:hover { color: var(--say); border-color: var(--say); }
+.hdr__reset:hover { color: var(--danger); border-color: var(--danger); }
 
 /* ---------- Легенда ---------- */
 .legend {
@@ -176,6 +179,19 @@ main { padding: 12px var(--pad) 60px; }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   margin-bottom: var(--gap);
+}
+
+/* Скругление верхних углов раньше давал overflow:hidden на .block,
+   но он же ломает position:sticky у .block__head (любой overflow
+   не visible на предке превращает его в "клиппер" для sticky-детей,
+   и заголовок перестаёт цепляться к прокрутке страницы). Скругляем
+   сам заголовок точечно вместо клиппинга всей карточки. */
+.block__head {
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.block__body {
+  border-radius: 0 0 var(--radius) var(--radius);
   overflow: hidden;
 }
 
@@ -193,6 +209,18 @@ main { padding: 12px var(--pad) 60px; }
   color: inherit;
   text-align: left;
   cursor: pointer;
+}
+
+/* Шапка раскрытой карточки прилипает под общим хедером сайта, пока
+   карточка в зоне видимости — иначе на длинном блоке приходится
+   проматывать весь текст назад, чтобы найти кнопку закрытия.
+   --hdr-h считает app.js (высота .hdr плавающая: заголовок переносится). */
+.block.is-open .block__head {
+  position: sticky;
+  top: var(--hdr-h, 96px);
+  z-index: 5;
+  background: var(--surface);
+  box-shadow: 0 1px 0 var(--border);
 }
 
 .block__num {
@@ -300,7 +328,7 @@ main { padding: 12px var(--pad) 60px; }
 .item--skip .item__text { border-left-color: var(--skip); color: var(--text-dim); font-size: 14px; }
 
 .item--critical .item__text {
-  background: var(--say-soft);
+  background: var(--danger-soft);
   border-radius: 0 8px 8px 0;
   padding: 6px 9px;
   font-weight: 650;
@@ -308,7 +336,7 @@ main { padding: 12px var(--pad) 60px; }
 
 .money {
   display: inline-block;
-  background: var(--say);
+  background: var(--danger);
   color: #fff;
   font-size: 12.5px;
   font-weight: 700;
@@ -333,6 +361,7 @@ main { padding: 12px var(--pad) 60px; }
   font-size: 14.5px;
   line-height: 1.45;
   font-style: italic;
+  white-space: pre-line; /* \n\n в data/briefing.json — разрыв абзаца в длинных цитатах */
 }
 
 .check {
@@ -377,7 +406,7 @@ th, td {
 }
 
 th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
-td:last-child { white-space: nowrap; color: var(--say); font-weight: 600; }
+td:last-child { white-space: nowrap; color: var(--danger); font-weight: 600; }
 
 .links { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
 
