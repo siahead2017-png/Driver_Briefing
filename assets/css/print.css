@@ -80,8 +80,8 @@ body {
   align-items: flex-end;
   gap: 10px;
   border-bottom: 2px solid var(--ink);
-  padding-bottom: 4px;
-  margin-bottom: 7px;
+  padding-bottom: 3px;
+  margin-bottom: 5px;
 }
 
 .head h1 {
@@ -230,7 +230,7 @@ td:last-child { color: var(--danger); font-weight: 600; white-space: nowrap; }
 /* ---------- Памятка водителя ----------
    Кегль 9.5pt не трогать: это документ, который водитель читает с рук.
    Место экономим интервалами — они дешевле читаемости. */
-.grp { margin-bottom: 3px; break-inside: avoid; }
+.grp { margin-bottom: 2px; break-inside: avoid; }
 
 .grp__t {
   font-size: 10pt;

@@ -108,7 +108,7 @@ function renderCheat(data) {
     <p class="lead">${esc(cs.lead)}</p>
     ${groups}
     <div class="qr-wrap">${qr}</div>
-    <p class="foot">Наведите камеру телефона на QR — откроется сайт. Добавьте его на рабочий экран.</p>
+    <p class="foot">Наведите камеру на QR — откроется сайт. «Инструкции» добавьте на экран личного телефона.</p>
   </div>`;
 }
 
