@@ -8,8 +8,11 @@
   --ink: #10151c;
   --dim: #59626e;
   --line: #c9d1da;
-  --say: #d2373c;
-  --show: #b26a05;
+  /* Опасность (деньги/критично) — отдельный токен, не завязан на цвет
+     уровня «Говорить» (см. тот же приём и его причину в styles.css). */
+  --danger: #d2373c;
+  --say: #15803d;
+  --show: #a16207;
   --accent: #1f6feb;
   --tint: #f2f5f9;
 }
@@ -175,14 +178,14 @@ body {
 
 .row--critical .row__t {
   background: #fdecec;
-  border-left: 2px solid var(--say);
+  border-left: 2px solid var(--danger);
   padding: 1px 5px;
   margin-left: -5px;
 }
 
 .tag {
   display: inline-block;
-  background: var(--say);
+  background: var(--danger);
   color: #fff;
   font-size: 7.5pt;
   font-weight: 700;
@@ -220,7 +223,7 @@ body {
 table { border-collapse: collapse; width: 100%; font-size: 8pt; margin: 2.5px 0; }
 th, td { border: .6px solid var(--line); padding: 2px 5px; text-align: left; vertical-align: top; }
 th { background: var(--tint); font-weight: 600; }
-td:last-child { color: var(--say); font-weight: 600; white-space: nowrap; }
+td:last-child { color: var(--danger); font-weight: 600; white-space: nowrap; }
 
 /* ---------- Памятка водителя ---------- */
 .grp { margin-bottom: 4px; break-inside: avoid; }

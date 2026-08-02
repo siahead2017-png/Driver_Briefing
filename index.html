@@ -10,7 +10,13 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
-<link rel="stylesheet" href="assets/css/styles.css">
+<script>
+  // Обычный <link> кэшируется агрессивно (особенно на телефоне, установленном
+  // как PWA) — после правок в styles.css пользователь мог не увидеть новую
+  // версию. document.write здесь нужен специально: он блокирует парсер так же,
+  // как обычный <link> в разметке, поэтому страница не мигает без стилей.
+  document.write('<link rel="stylesheet" href="assets/css/styles.css?v=' + Date.now() + '">');
+</script>
 </head>
 <body>
 
@@ -39,6 +45,12 @@
   <a href="https://siahead2017-png.github.io/FuelInstruction/" target="_blank" rel="noopener">Заправки</a>
 </p>
 
-<script type="module" src="assets/js/app.js"></script>
+<script>
+  // Та же причина, что и для styles.css выше — версия в query обходит кэш.
+  const appScript = document.createElement('script');
+  appScript.type = 'module';
+  appScript.src = 'assets/js/app.js?v=' + Date.now();
+  document.body.appendChild(appScript);
+</script>
 </body>
 </html>

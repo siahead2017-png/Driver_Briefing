@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Инструктаж водителя — печать</title>
 <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/css/print.css">
+<script>
+  // См. index.html — document.write обходит агрессивное кэширование <link>
+  // и всё равно блокирует парсер, поэтому страница не мигает без стилей.
+  document.write('<link rel="stylesheet" href="assets/css/print.css?v=' + Date.now() + '">');
+</script>
 </head>
 <body>
 
@@ -19,6 +23,11 @@
 
 <div id="doc"><p style="padding:24px">Загружаю…</p></div>
 
-<script type="module" src="assets/js/print.js"></script>
+<script>
+  const printScript = document.createElement('script');
+  printScript.type = 'module';
+  printScript.src = 'assets/js/print.js?v=' + Date.now();
+  document.body.appendChild(printScript);
+</script>
 </body>
 </html>
