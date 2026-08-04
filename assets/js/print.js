@@ -152,7 +152,7 @@ function renderContacts(data) {
   return `<div class="sheet">
     ${headTag(data, c.title)}
     <p class="lead">${esc(c.lead)}</p>
-    ${groups}
+    <div class="ct-cols">${groups}</div>
     ${c.note ? `<p class="foot">${esc(c.note)}</p>` : ''}
   </div>`;
 }
