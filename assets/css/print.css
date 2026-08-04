@@ -65,6 +65,13 @@ body {
   cursor: pointer;
 }
 
+.toolbar__hint {
+  flex-basis: 100%;
+  font-size: 11px;
+  color: #9aa4b2;
+  text-align: right;
+}
+
 /* ---------- Лист ---------- */
 .sheet {
   width: 186mm;
