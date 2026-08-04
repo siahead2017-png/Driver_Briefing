@@ -13,6 +13,7 @@
 import functools
 import http.server
 import os
+import shutil
 import socket
 import socketserver
 import sys
@@ -25,6 +26,12 @@ from pypdf import PdfReader
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, '..'))
 DIST = os.path.join(ROOT, 'dist')
+
+# QR "Контакты офиса" ведёт на этот адрес (см. data/briefing.json -> links.contacts),
+# чтобы водитель при сканировании видел домен Driver_Instructions (знакомое ему
+# приложение), а не Driver_Briefing (внутренний инструмент, не для водителя).
+# Копия — мягкая: если соседней папки нет (перенесли/переименовали), просто пропускаем.
+KB_CONTACTS_PDF = os.path.join(ROOT, '..', 'Dashboard_Instructions', 'assets', 'docs', 'office-contacts.pdf')
 
 # Последнее число — сколько листов документ занимать НЕ должен. «Один лист»
 # у памятки — жёсткое требование: её отдают водителю на руки. Считать
@@ -110,6 +117,14 @@ def main():
             browser.close()
     finally:
         httpd.shutdown()
+
+    kb_docs_dir = os.path.dirname(KB_CONTACTS_PDF)
+    if os.path.isdir(kb_docs_dir):
+        shutil.copy(os.path.join(DIST, 'office-contacts.pdf'), KB_CONTACTS_PDF)
+        print('Скопировано в Driver_Instructions:', KB_CONTACTS_PDF)
+    else:
+        print(f'! Папка {kb_docs_dir} не найдена — office-contacts.pdf в Driver_Instructions '
+              f'не обновлён, скопируйте вручную.')
 
     print('Готово:', DIST)
     if over:

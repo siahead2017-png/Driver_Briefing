@@ -6,7 +6,7 @@
   "links": {
     "kb": "https://siahead2017-png.github.io/Driver_Instructions/",
     "fuel": "https://siahead2017-png.github.io/FuelInstruction/",
-    "contacts": "https://siahead2017-png.github.io/Driver_Briefing/dist/office-contacts.pdf"
+    "contacts": "https://siahead2017-png.github.io/Driver_Instructions/assets/docs/office-contacts.pdf"
   },
   "legend": {
     "say": "Говорить — деньги, штраф, увольнение",
@@ -174,7 +174,7 @@
     "qr": [
       { "file": "kb", "title": "Инструкции", "caption": "Все инструкции, памятки, видео, калькулятор топлива" },
       { "file": "fuel", "title": "Заправки", "caption": "Где и какой картой заправляться. Обновляется ежедневно" },
-      { "file": "contacts", "title": "Контакты офиса", "caption": "Отдел учёта, механики, бухгалтерия" }
+      { "file": "contacts", "title": "Контакты офиса", "caption": "Все отделы: учёт, механики, транспорт и другие" }
     ]
   },
 
