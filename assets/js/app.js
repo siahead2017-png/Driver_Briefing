@@ -125,7 +125,19 @@ function renderLegend() {
    инструктажа она гарантированно не занимает экран. */
 function renderGuide() {
   const g = data.guide;
-  if (!g || !Array.isArray(g.sections)) return;
+
+  // Раздела нет — говорим об этом вслух, а не молчим. checkShape() сюда не
+  // достаёт намеренно: без "guide" инструктаж вести всё ещё можно, ронять из-за
+  // него всю страницу неправильно. Но и тихо исчезать нельзя — владелец правит
+  // JSON в веб-редакторе GitHub, и удалённый ключ он замечал бы только тогда,
+  // когда коллега перед первым инструктажем не найдёт, что читать.
+  if (!g || !Array.isArray(g.sections)) {
+    $('#guide').innerHTML = `<p class="note">В <code>data/briefing.json</code> нет
+      раздела <b>"guide"</b> (или в нём нет списка <b>"sections"</b>) — карточка
+      «Как вести инструктаж» не собралась. Сам сценарий ниже работает.</p>`;
+    $('#guide').hidden = false;
+    return;
+  }
 
   const sections = g.sections.map(s => `
     <div class="guide__sec">
